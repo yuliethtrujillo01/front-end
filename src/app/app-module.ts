@@ -1,6 +1,5 @@
 import { NgModule, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing-module';
 import { App } from './app';
 import { LoginComponent } from './login.component/login.component';
@@ -13,6 +12,10 @@ import { MateComponent } from './mate.component/mate.component';
 import { CodigoCComponent } from './codigo-c.component/codigo-c.component';
 import { EscitalaComponent } from './escitala.component/escitala.component';
 import { AnalisisComponent } from './analisis.component/analisis.component';
+import { HttpClientModule } from '@angular/common/http';
+import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { CommonModule, DecimalPipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -26,15 +29,19 @@ import { AnalisisComponent } from './analisis.component/analisis.component';
     MateComponent,
     CodigoCComponent,
     EscitalaComponent,
-    AnalisisComponent,
+    AnalisisComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule,
+    FormsModule,
+    RouterModule,
+    CommonModule
   ],
   providers: [
     provideBrowserGlobalErrorListeners()
   ],
   bootstrap: [App]
 })
-export class AppModule { }
+export class AppModule {}

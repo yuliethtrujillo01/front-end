@@ -168,19 +168,169 @@ body {
     gap: 30px;
     padding-top: 100px; /* Más espacio */
   }
+
   .modulos-page-container {
     height: auto;
     min-height: 100vh;
   }
+
   .logo-area-fixed, .btn-volver {
     left: 50%;
     transform: translateX(-50%);
     width: auto;
   }
+
   .logo-area-fixed {
     top: 20px;
   }
+
   .btn-volver {
     top: 100px;
   }
+
+  /* Tarjeta grande */
+  .modulo-card-grande {
+    width: 100%;
+    max-width: 900px;
+    margin: 30px auto;
+  }
+
+  /* Inputs vistosos */
+  .curso-input {
+    width: 100%;
+    padding: 14px 16px;
+    font-size: 16px;
+    border-radius: 15px;
+    border: 2px solid #d1007a;
+    outline: none;
+    margin-top: 12px;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.15);
+    transition: 0.3s ease;
+  }
+
+  .curso-input:focus {
+    border-color: #9b0058;
+    box-shadow: 0px 4px 10px rgba(209, 0, 122, 0.3);
+  }
+
+  /* Espacios */
+  .curso-form, .curso-busqueda {
+    margin-top: 20px;
+    text-align: center;
+  }
+  .curso-form {
+    width: 100%;
+    max-width: 600px;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .curso-label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+  }
+
+  .curso-input {
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 2px solid #b4006d;
+    font-size: 16px;
+  }
+
+  .modulo-card-grande {
+    margin-top: 120px !important;  /* 🔥 deja buen espacio respecto a módulos superiores */
+    padding-bottom: 30px;
+  }
+  .formulario-izquierda {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    padding: 10px 0;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .curso-label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+  }
+
+  .curso-input {
+    padding: 10px;
+    border-radius: 8px;
+    border: 2px solid #d16ba5;
+    width: 100%;
+    font-size: 15px;
+  }
+  /* Botón secundario */
+  .btn-secondary {
+    background-color: #6c757d;
+    border: 1px solid #6c757d;
+  }
+
+  .btn-secondary:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
+  }
+
+  /* Botón de eliminar con estilo diferente */
+  .btn-eliminar {
+    background-color: #dc3545;
+    border: 1px solid #dc3545;
+  }
+
+  .btn-eliminar:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+  }
+
+  /* Información de resultados */
+  .resultados-info {
+    text-align: center;
+    margin: 15px 0;
+    color: #666;
+    font-style: italic;
+  }
+
+  /* Mensaje de no resultados */
+  .no-resultados {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+    font-style: italic;
+    border: 1px dashed #ddd;
+    border-radius: 8px;
+    margin-top: 20px;
+  }
+
+  /* Estilo para cursos en resultados */
+  .curso-resultado {
+    transition: all 0.3s ease;
+  }
+
+  .curso-resultado:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+
+  /* Botones deshabilitados */
+  button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
 }

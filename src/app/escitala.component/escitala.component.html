@@ -4,21 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Escítala Espartana</title>
-
 </head>
 <body>
 
 <div class="main-layout">
 
   <aside class="sidebar">
-
     <div class="logo-area">
       <img src="assets/imagenes/ojo.jpg" alt="Logo OVA" class="logo-icon">
     </div>
-
     <div class="sidebar-content">
     </div>
-
     <button routerLink="/mate" class="btn-volver btn-magenta-sidebar">VOLVER</button>
   </aside>
 
@@ -38,29 +34,69 @@
       <div class="interaction-container">
 
         <div class="controls-area">
-          <label for="clave-escitala">Clave (Columnas/Diámetro):</label>
-          <input type="number" id="clave-escitala" min="2" value="4">
+          <label for="clave-escitala">Clave (Filas):</label>
+          <input type="number" id="clave-escitala"
+                 [(ngModel)]="cifradoRequest.filas"
+                 min="2" value="4">
         </div>
 
         <div class="interaction-box">
           <h3>Mensaje Original / Cifrado</h3>
-          <textarea id="texto-entrada" rows="5" placeholder="Ingresa el mensaje a cifrar o el código a descifrar (solo letras)"></textarea>
+          <textarea id="texto-entrada" rows="5"
+                    [(ngModel)]="cifradoRequest.mensaje"
+                    placeholder="Ingresa el mensaje a cifrar o el código a descifrar (solo letras)"></textarea>
 
           <div class="action-buttons">
-            <button class="btn-magenta" id="btn-cifrar-escitala">CIFRAR</button>
-            <button class="btn-magenta" id="btn-descifrar-escitala">DESCIFRAR</button>
+            <button class="btn-magenta"
+                    (click)="procesarCifrado('cifrar')"
+                    [disabled]="cargando || !cifradoRequest.mensaje">
+              {{ cargando && operacionActual === 'cifrar' ? 'CIFRANDO...' : 'CIFRAR' }}
+            </button>
+            <button class="btn-magenta"
+                    (click)="procesarCifrado('descifrar')"
+                    [disabled]="cargando || !cifradoRequest.mensaje">
+              {{ cargando && operacionActual === 'descifrar' ? 'DESCIFRANDO...' : 'DESCIFRAR' }}
+            </button>
           </div>
         </div>
 
-        <div class="result-box">
+        <!-- Estado de carga -->
+        <div *ngIf="cargando" class="loading-state">
+          <p>Procesando mensaje... Por favor espere.</p>
+        </div>
+
+        <!-- Resultados del backend -->
+        <div *ngIf="resultado && !cargando" class="result-box">
+          <h3>Resultado</h3>
+          <p class="resultado-escitala">{{ resultado.resultado }}</p>
+          <div class="result-info">
+            <p><strong>Curso:</strong> {{ resultado.curso }}</p>
+            <p><strong>Tipo:</strong> {{ resultado.tipo }}</p>
+            <p><strong>Operación:</strong> {{ resultado.operacion }}</p>
+          </div>
+        </div>
+
+        <!-- Error -->
+        <div *ngIf="error && !cargando" class="error-state">
+          <h3>Error en el procesamiento</h3>
+          <p>{{ error }}</p>
+        </div>
+
+        <!-- Estado inicial -->
+        <div *ngIf="!resultado && !error && !cargando" class="result-box">
           <h3>Resultado</h3>
           <p class="resultado-escitala">[El mensaje cifrado o descifrado aparecerá aquí]</p>
         </div>
 
         <div class="matrix-visualization">
-          <h3>Visualización de la Matriz (Opcional)</h3>
+          <h3>Información del Proceso</h3>
           <div id="matriz-output" class="matrix-grid">
-            <p>La transposición se realiza llenando una matriz por filas y leyendo el resultado por columnas.</p>
+            <p *ngIf="resultado">
+              El mensaje ha sido procesado exitosamente usando el cifrado Escítala con {{ cifradoRequest.filas }} filas.
+            </p>
+            <p *ngIf="!resultado">
+              La transposición se realiza llenando una matriz por filas y leyendo el resultado por columnas.
+            </p>
           </div>
         </div>
       </div>

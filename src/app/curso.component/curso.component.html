@@ -1,54 +1,147 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Módulos Principales</title>
-
-</head>
-<body>
-
 <div class="modulos-page-container">
 
+  <!-- LOGO -->
   <div class="logo-area-fixed">
     <img src="assets/imagenes/ojo.jpg" alt="Logo OVA" class="logo-icon">
   </div>
 
   <button routerLink="/home" class="btn-volver btn-magenta">VOLVER</button>
 
+  <!-- GRID DE 2 CARDS -->
   <div class="modulos-grid-wrapper">
 
+    <!-- TARJETA 1 -->
     <div class="modulo-card">
       <div class="module-title-label btn-magenta">Analisis Numerico</div>
 
       <div class="icon-circle-modulo icon-verde">
-        <img src="assets/imagenes/analisis.png" alt="Icono Análisis Numérico" class="img-fluid">
+        <img src="assets/imagenes/analisis.png" class="img-fluid">
       </div>
 
       <p class="modulo-text">
-        Enfocado en la búsqueda de soluciones aproximadas para problemas complejos. Profundiza en el Método de Bisección, una técnica esencial para localizar raíces de funciones mediante la reducción iterativa de intervalos.
+        Enfocado en la búsqueda de soluciones aproximadas para problemas complejos.
       </p>
 
       <button routerLink="/analisis" class="btn-empezar btn-magenta">Empezar</button>
     </div>
 
+    <!-- TARJETA 2 -->
     <div class="modulo-card">
       <div class="module-title-label btn-magenta">Matematicas Discretas</div>
 
       <div class="icon-circle-modulo icon-verde">
-        <img src="assets/imagenes/mate.png" alt="Icono Matemáticas Discretas" class="img-fluid">
+        <img src="assets/imagenes/mate.png" class="img-fluid">
       </div>
 
       <p class="modulo-text">
-        Explora estructuras fundamental, lógica y la teoría de conjuntos. Este módulo se centra en métodos clásicos de la criptografía: el Código César y por transposición de la Escítala Espartana.
+        Explora estructuras fundamentales, lógica y teoría de conjuntos.
       </p>
 
       <button routerLink="/mate" class="btn-empezar btn-magenta">Empezar</button>
     </div>
 
   </div>
+  <br><br><br>
+
+  <!-- TARJETA GRANDE DE CURSOS -->
+  <div class="modulo-card modulo-card-grande">
+
+    <div class="module-title-label btn-magenta">Gestión de Cursos</div>
+
+    <div class="icon-circle-modulo icon-verde">
+      <img src="assets/imagenes/LOGO%20GESTION%20CURSOS.png" class="img-fluid" alt="Gestion de Cursos">
+    </div>
+
+    <p class="modulo-text">
+      Administra tus cursos: crea, busca y elimina cursos fácilmente.
+    </p>
+
+    <!-- FORMULARIO DE CREACIÓN -->
+    <div class="curso-form formulario-izquierda">
+
+      <div class="form-group">
+        <label class="curso-label">Nombre del curso</label>
+        <input class="curso-input" type="text" [(ngModel)]="nuevoCurso.nombre"
+               placeholder="Ingresa el nombre del curso">
+      </div>
+      <br>
+
+      <div class="form-group">
+        <label class="curso-label">Descripción</label>
+        <input class="curso-input" type="text" [(ngModel)]="nuevoCurso.descripcion"
+               placeholder="Ingresa la descripción">
+      </div>
+      <br>
+
+      <div class="form-group">
+        <label class="curso-label">Duración (horas)</label>
+        <input class="curso-input" type="number" [(ngModel)]="nuevoCurso.duracion"
+               min="1" placeholder="Horas de duración">
+      </div>
+
+      <button (click)="crearCurso()"
+              [disabled]="!nuevoCurso.nombre || !nuevoCurso.descripcion || !nuevoCurso.duracion"
+              class="btn-empezar btn-magenta"
+              style="margin-top: 15px;">
+        Crear Curso
+      </button>
+
+    </div>
+
+    <hr>
+    <br>
+
+    <!-- BUSQUEDA -->
+    <div class="curso-busqueda">
+      <input class="curso-input" type="text"
+             placeholder="Buscar curso por nombre..."
+             [(ngModel)]="nombreBusqueda"
+             (keyup.enter)="buscarCursos()">
+      <button (click)="buscarCursos()"
+              [disabled]="!nombreBusqueda.trim()"
+              class="btn-empezar btn-magenta">
+        Buscar
+      </button>
+      <button *ngIf="nombreBusqueda.trim()"
+              (click)="limpiarBusqueda()"
+              class="btn-empezar btn-secondary"
+              style="margin-left: 10px;">
+        Limpiar
+      </button>
+    </div>
+
+    <!-- CONTADOR DE RESULTADOS -->
+    <div *ngIf="cursos.length > 0" class="resultados-info">
+      <p>Se encontraron {{cursos.length}} curso(s)</p>
+    </div>
+
+  </div>
+
+  <!-- RESULTADOS DE BÚSQUEDA -->
+  <div *ngIf="cursos.length > 0" class="modulos-grid-wrapper" style="margin-top:30px;">
+    <div *ngFor="let c of cursos" class="modulo-card curso-resultado">
+      <div class="module-title-label btn-magenta">{{ c.nombre }}</div>
+
+      <div class="icon-circle-modulo icon-verde">
+        <img src="assets/imagenes/LOGO GESTION CURSOS.png" class="img-fluid" alt="Curso">
+      </div>
+
+      <p class="modulo-text">
+        {{ c.descripcion }}
+        <br><strong>Duración:</strong> {{ c.duracion }} horas
+      </p>
+
+      <button (click)="eliminarCurso(c.id)"
+              class="btn-empezar btn-eliminar">
+        Eliminar
+      </button>
+    </div>
+  </div>
+
+  <!-- MENSAJE CUANDO NO HAY RESULTADOS -->
+  <div *ngIf="nombreBusqueda.trim() && cursos.length === 0"
+       class="no-resultados">
+    <p>No se encontraron cursos con "{{nombreBusqueda}}"</p>
+  </div>
 
 </div>
-
-</body>
-</html>

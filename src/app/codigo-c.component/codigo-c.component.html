@@ -10,14 +10,11 @@
 <div class="main-layout">
 
   <aside class="sidebar">
-
     <div class="logo-area">
       <img src="assets/imagenes/ojo.jpg" alt="Logo OVA" class="logo-icon">
     </div>
-
     <div class="sidebar-content">
     </div>
-
     <button routerLink='/mate' class="btn-volver btn-magenta-sidebar">VOLVER</button>
   </aside>
 
@@ -30,45 +27,76 @@
     <div class="module-simulation-area split-area">
 
       <div class="split-column">
-        <h2>Cifrar Mensaje </h2>
+        <h2>Cifrar Mensaje</h2>
         <p>Usa esta sección para convertir un mensaje legible en código secreto.</p>
 
         <div class="interaction-box">
           <label for="mensaje-original">Mensaje Original:</label>
-          <textarea id="mensaje-original" rows="3" placeholder="Ingresa el texto a cifrar (solo letras A-Z)"></textarea>
+          <textarea id="mensaje-original" rows="3"
+                    [(ngModel)]="mensajeCifrar"
+                    placeholder="Ingresa el texto a cifrar (solo letras A-Z)"></textarea>
 
-          <label for="clave-cifrado">Clave :</label>
-          <input type="number" id="clave-cifrado" min="1" max="25" value="3">
+          <label for="clave-cifrado">Clave:</label>
+          <input type="number" id="clave-cifrado"
+                 [(ngModel)]="claveCifrar"
+                 min="1" max="25" value="3">
 
-          <button class="btn-magenta">CIFRAR</button>
+          <button class="btn-magenta"
+                  (click)="procesarCifrado('cifrar')"
+                  [disabled]="cargando || !mensajeCifrar">
+            {{ cargando && operacionActual === 'cifrar' ? 'CIFRANDO...' : 'CIFRAR' }}
+          </button>
 
           <div class="result-area">
             <label>Mensaje Cifrado:</label>
-            <p class="resultado-cifrado">[Resultado del cifrado]</p>
+            <p class="resultado-cifrado">
+              {{ resultadoCifrar || '[Resultado del cifrado]' }}
+            </p>
           </div>
         </div>
       </div>
 
       <div class="split-column">
-        <h2>Descifrar Mensaje </h2>
+        <h2>Descifrar Mensaje</h2>
         <p>Usa esta sección para revelar el mensaje secreto usando la clave.</p>
 
         <div class="interaction-box">
           <label for="mensaje-cifrado">Mensaje Cifrado:</label>
-          <textarea id="mensaje-cifrado" rows="3" placeholder="Ingresa el código secreto"></textarea>
+          <textarea id="mensaje-cifrado" rows="3"
+                    [(ngModel)]="mensajeDescifrar"
+                    placeholder="Ingresa el código secreto"></textarea>
 
-          <label for="clave-descifrado">Clave :</label>
-          <input type="number" id="clave-descifrado" min="1" max="25" value="3">
+          <label for="clave-descifrado">Clave:</label>
+          <input type="number" id="clave-descifrado"
+                 [(ngModel)]="claveDescifrar"
+                 min="1" max="25" value="3">
 
-          <button class="btn-magenta">DESCIFRAR</button>
+          <button class="btn-magenta"
+                  (click)="procesarCifrado('descifrar')"
+                  [disabled]="cargando || !mensajeDescifrar">
+            {{ cargando && operacionActual === 'descifrar' ? 'DESCIFRANDO...' : 'DESCIFRAR' }}
+          </button>
 
           <div class="result-area">
             <label>Mensaje Descifrado:</label>
-            <p class="resultado-descifrado">[Resultado del descifrado]</p>
+            <p class="resultado-descifrado">
+              {{ resultadoDescifrar || '[Resultado del descifrado]' }}
+            </p>
           </div>
         </div>
       </div>
 
+    </div>
+
+    <!-- Estado de carga general -->
+    <div *ngIf="cargando" class="loading-overlay">
+      <p>Procesando mensaje... Por favor espere.</p>
+    </div>
+
+    <!-- Información del resultado -->
+    <div *ngIf="(resultadoCifrar || resultadoDescifrar) && !cargando" class="result-info-global">
+      <h3>Información del Proceso</h3>
+      <p>Operación completada usando Cifrado César</p>
     </div>
 
   </div>

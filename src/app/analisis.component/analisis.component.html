@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Análisis Numérico: Método de Bisección</title>
-
 </head>
 <body>
 
@@ -31,7 +30,7 @@
 
         <div class="description-box">
           <h2>Localización de Raíces</h2>
-          <p>El Método de Bisección localiza la raíz de una función f(x) dentro de un intervalo [a, b], garantizando la convergencia si f(a) y f(b) tienen signos opuestos. Ingresa los parámetros y la función matemática  para comenzar la simulación.</p>
+          <p>El Método de Bisección localiza la raíz de una función f(x) dentro de un intervalo [a, b], garantizando la convergencia si f(a) y f(b) tienen signos opuestos. Ingresa los parámetros y la función matemática para comenzar la simulación.</p>
         </div>
 
         <div class="interaction-container">
@@ -40,44 +39,89 @@
 
             <div class="input-group">
               <label for="funcion-fx">Función f(x) = </label>
-              <input type="text" id="funcion-fx" value="Math.pow(x, 3) - x - 1" placeholder="Ej: Math.cos(x) - x" title="Usa notación JavaScript (Ej: Math.pow(x, 2) - 4)">
+              <input type="text" id="funcion-fx"
+                     [(ngModel)]="biseccionRequest.funcion"
+                     value="x^3 - x - 1"
+                     placeholder="Ej: x^2 - 4"
+                     title="Usa notación matemática (Ej: x^2 - 4, sin(x), cos(x))">
             </div>
 
             <div class="input-group">
               <label for="valor-a">Valor de a:</label>
-              <input type="number" id="valor-a" value="1" step="any">
+              <input type="number" id="valor-a"
+                     [(ngModel)]="biseccionRequest.a"
+                     value="1" step="any">
             </div>
 
             <div class="input-group">
               <label for="valor-b">Valor de b:</label>
-              <input type="number" id="valor-b" value="2" step="any">
+              <input type="number" id="valor-b"
+                     [(ngModel)]="biseccionRequest.b"
+                     value="2" step="any">
             </div>
 
             <div class="input-group">
               <label for="tolerancia">Tolerancia:</label>
-              <input type="number" id="tolerancia" value="0.0001" min="0.000000001" step="any">
+              <input type="number" id="tolerancia"
+                     [(ngModel)]="biseccionRequest.tolerancia"
+                     value="0.0001" min="0.000000001" step="any">
             </div>
 
             <div class="input-group">
               <label for="max-iteraciones">Máx. Iteraciones:</label>
-              <input type="number" id="max-iteraciones" value="20" min="1" step="1">
+              <input type="number" id="max-iteraciones"
+                     [(ngModel)]="biseccionRequest.iteraciones"
+                     value="20" min="1" step="1">
             </div>
           </div>
 
           <div class="action-results-box">
-            <button class="btn-magenta" id="btn-iniciar-biseccion">INICIAR CÁLCULO</button>
+            <button class="btn-magenta"
+                    (click)="ejecutarBiseccion()"
+                    [disabled]="cargando"
+                    id="btn-iniciar-biseccion">
+              {{ cargando ? 'CALCULANDO...' : 'INICIAR CÁLCULO' }}
+            </button>
 
-            <div class="result-summary">
+            <!-- Estado de carga -->
+            <div *ngIf="cargando" class="loading-state">
+              <p>Calculando raíz... Por favor espere.</p>
+            </div>
+
+            <!-- Resultados del backend -->
+            <div *ngIf="resultado && !cargando" class="result-summary">
+              <h3>Resultado Final</h3>
+              <p class="resultado-raiz">Raíz Aproximada: {{ resultado.raizAproximada | number:'1.6-6' }}</p>
+              <p class="resultado-curso">Curso: {{ resultado.curso }}</p>
+              <p class="resultado-metodo">Método: {{ resultado.metodo }}</p>
+              <p class="resultado-funcion">Función: {{ resultado.funcion }}</p>
+              <p class="resultado-mensaje">Estado: {{ resultado.mensaje }}</p>
+              <p class="resultado-convergio" [class.converge]="resultado.convergio" [class.no-converge]="!resultado.convergio">
+                {{ resultado.convergio ? '✓ Convergió' : '✗ No convergió' }}
+              </p>
+            </div>
+
+            <!-- Error -->
+            <div *ngIf="error && !cargando" class="error-state">
+              <h3>Error en el cálculo</h3>
+              <p>{{ error }}</p>
+            </div>
+
+            <!-- Estado inicial -->
+            <div *ngIf="!resultado && !error && !cargando" class="result-summary">
               <h3>Resultado Final</h3>
               <p class="resultado-raiz">Raíz Aproximada: [Esperando cálculo...]</p>
               <p class="resultado-iteraciones">Iteraciones Usadas: 0</p>
             </div>
           </div>
 
+          <!-- TABLA DE ITERACIONES COMPLETA -->
           <div class="table-visualization">
             <h3>Tabla de Iteraciones</h3>
             <div class="table-scroll-container">
-              <table id="tabla-biseccion">
+
+              <!-- Tabla cuando hay resultados -->
+              <table id="tabla-biseccion" *ngIf="iteraciones && iteraciones.length > 0">
                 <thead>
                 <tr>
                   <th>n</th>
@@ -86,12 +130,36 @@
                   <th>c_n</th>
                   <th>f(a_n)</th>
                   <th>f(c_n)</th>
-                  <th>Error Absoluto</th>
+                  <th>Error</th>
                 </tr>
                 </thead>
                 <tbody>
+                <tr *ngFor="let iter of iteraciones"
+                    [class.iteracion-actual]="iter === iteraciones[iteraciones.length - 1]">
+                  <td>{{ iter.iteracion }}</td>
+                  <td>{{ iter.a | number:'1.6-6' }}</td>
+                  <td>{{ iter.b | number:'1.6-6' }}</td>
+                  <td>{{ iter.c | number:'1.6-6' }}</td>
+                  <td>{{ iter.fa | number:'1.6-6' }}</td>
+                  <td>{{ iter.fc | number:'1.6-6' }}</td>
+                  <td>{{ iter.error | number:'1.6-6' }}</td>
+                </tr>
                 </tbody>
               </table>
+
+              <!-- Mensaje cuando no hay iteraciones -->
+              <div *ngIf="!iteraciones || iteraciones.length === 0" class="info-message">
+                <p *ngIf="cargando">Calculando iteraciones...</p>
+                <p *ngIf="!cargando && !resultado">La tabla de iteraciones se mostrará aquí después del cálculo.</p>
+                <p *ngIf="!cargando && resultado && iteraciones.length === 0">No se generaron iteraciones. Verifique los datos ingresados.</p>
+              </div>
+
+            </div>
+
+            <!-- Resumen de iteraciones -->
+            <div *ngIf="iteraciones && iteraciones.length > 0" class="iteraciones-resumen">
+              <p><strong>Total de iteraciones:</strong> {{ iteraciones.length }}</p>
+              <p><strong>Último error:</strong> {{ iteraciones[iteraciones.length - 1].error | number:'1.6-6' }}</p>
             </div>
           </div>
 
