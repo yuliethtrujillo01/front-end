@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import {AuthService} from '../auth.component/auth.service';
+
 
 @Component({
   selector: 'app-home-cards.component',
@@ -8,4 +10,9 @@ import { Component } from '@angular/core';
 })
 export class HomeCardsComponent {
 
+  constructor(private authService: AuthService) {}  // <-- INYECTAR SERVICIO
+
+  logout() {
+    this.authService.logout();
+  }
 }

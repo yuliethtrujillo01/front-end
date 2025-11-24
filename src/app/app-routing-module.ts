@@ -10,20 +10,26 @@ import {MateComponent} from './mate.component/mate.component';
 import {CodigoCComponent} from './codigo-c.component/codigo-c.component';
 import {EscitalaComponent} from './escitala.component/escitala.component';
 import {AnalisisComponent} from './analisis.component/analisis.component';
+import {AuthGuard} from './auth.component/auth.guard';
+
+
 
 const routes: Routes = [
-  { path: '', component: LoginComponent },
-  { path: 'home', component: HomeCardsComponent },
-  { path: 'que-es', component: QueEsComponent },
-  { path: 'objetivos', component: ObjetivosComponent },
-  { path: 'creditos', component: CreditosComponent },
-  { path: 'curso', component: CursoComponent},
-  { path: 'mate', component: MateComponent },
-  { path: 'codigo-c', component: CodigoCComponent},
-  { path: 'escitala', component: EscitalaComponent},
-  { path: 'analisis', component: AnalisisComponent},
-  { path: '**', redirectTo: '' }
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
 
+  { path: 'home', component: HomeCardsComponent, canActivate: [AuthGuard] },
+  { path: 'que-es', component: QueEsComponent, canActivate: [AuthGuard] },
+  { path: 'objetivos', component: ObjetivosComponent, canActivate: [AuthGuard] },
+  { path: 'creditos', component: CreditosComponent, canActivate: [AuthGuard] },
+  { path: 'curso', component: CursoComponent, canActivate: [AuthGuard] },
+  { path: 'mate', component: MateComponent, canActivate: [AuthGuard] },
+  { path: 'codigo-c', component: CodigoCComponent, canActivate: [AuthGuard] },
+  { path: 'escitala', component: EscitalaComponent, canActivate: [AuthGuard] },
+  { path: 'analisis', component: AnalisisComponent, canActivate: [AuthGuard] },
+
+
+
+  { path: '**', redirectTo: 'home' }
 ];
 
 @NgModule({
